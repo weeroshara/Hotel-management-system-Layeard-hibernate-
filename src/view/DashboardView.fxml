@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="root" prefHeight="600.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="control.DashboardControl">
+   <children>
+      <JFXButton fx:id="_manageCustomerButton" layoutX="92.0" layoutY="123.0" onAction="#manageCustomerButtonOnAcion" prefHeight="119.0" prefWidth="254.0" style="-fx-background-color: #80ff00;" text="MANAGE _CUSTOMER">
+         <graphic>
+            <ImageView fitHeight="109.0" fitWidth="69.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/customer.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="manageRoomButton" layoutX="378.0" layoutY="123.0" onAction="#manageRoomButtonOnAction" prefHeight="119.0" prefWidth="242.0" style="-fx-background-color: #80ff00;" text="MANAGE _ROOMS">
+         <graphic>
+            <ImageView fitHeight="90.0" fitWidth="75.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/roms.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="manageFoodsButton" layoutX="92.0" layoutY="286.0" onAction="#manageFoodsButtonOnAction" prefHeight="119.0" prefWidth="254.0" style="-fx-background-color: #80ff00;" text="MANAGE _FOODS">
+         <graphic>
+            <ImageView fitHeight="105.0" fitWidth="82.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/foods.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="bookingRooms" layoutX="378.0" layoutY="286.0" onAction="#bookingRoomsOnAction" prefHeight="119.0" prefWidth="242.0" style="-fx-background-color: #80ff00;" text="_BOOKING ROOM">
+         <graphic>
+            <ImageView fitHeight="94.0" fitWidth="79.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/room.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="orderFoods" layoutX="92.0" layoutY="444.0" onAction="#orderFoodsOnAction" prefHeight="119.0" prefWidth="254.0" style="-fx-background-color: #80ff00;" text="_ORDR FOODS">
+         <graphic>
+            <ImageView fitHeight="90.0" fitWidth="71.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/ordFood.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <JFXButton fx:id="manageParck" layoutX="378.0" layoutY="444.0" onAction="#manageParckOnAction" prefHeight="119.0" prefWidth="242.0" style="-fx-background-color: #80ff00;" text="MANAGE _PARK">
+         <graphic>
+            <ImageView fitHeight="93.0" fitWidth="77.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/pk.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </JFXButton>
+      <Label layoutX="226.0" layoutY="26.0" prefHeight="32.0" prefWidth="304.0" text="WELCOME" textAlignment="CENTER" textFill="#2a801b">
+         <font>
+            <Font size="50.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
