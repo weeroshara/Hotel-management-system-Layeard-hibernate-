@@ -8,7 +8,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="commons-beanutils-1.7.0" level="project" />
+    <orderEntry type="library" exported="" name="hibernate" level="project" />
+    <orderEntry type="library" exported="" name="lib" level="project" />
     <orderEntry type="library" name="antlr-2.7.7" level="project" />
   </component>
 </module>

@@ -1,14 +1,27 @@
 package entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 
+@Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Food implements  SupperEntity{
+    @Id
     private String foodId;
     private String foodName;
     private BigDecimal price;
     private int puentityOnHand;
 
-    public Food() {
+    /*public Food() {
     }
 
     public Food(String foodId, String foodName, BigDecimal price, int puentityOnHand) {
@@ -58,5 +71,5 @@ public class Food implements  SupperEntity{
                 ", price=" + price +
                 ", puentityOnHand=" + puentityOnHand +
                 '}';
-    }
+    }*/
 }
