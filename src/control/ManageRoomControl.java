@@ -73,6 +73,9 @@ public class ManageRoomControl {
     }
 
     public void saveRoomButtonOnAction(ActionEvent actionEvent) throws Exception{
+        if (roomId.getText().isEmpty() || roomPrice.getText().isEmpty() || noOfBeds.getText().isEmpty()){
+            return;
+        }
         String id = roomId.getText();
         BigDecimal price = BigDecimal.valueOf(Double.parseDouble(roomPrice.getText()));
         int noOFbeds = Integer.parseInt(noOfBeds.getText());
@@ -90,9 +93,17 @@ public class ManageRoomControl {
 
         loadTable();
         saveRoom.setText("_Save");
+
+        roomId.clear();
+        roomPrice.clear();
+        noOfBeds.clear();
+        acOrNot.setSelected(false);
     }
 
     public void deleteButtonOnAction(ActionEvent actionEvent) throws Exception{
+        if (roomTable.getSelectionModel().isEmpty()){
+            return;
+        }
         roomBO.deleteRoom(roomTable.getSelectionModel().selectedItemProperty().getValue().getRoomId());
         loadTable();
     }

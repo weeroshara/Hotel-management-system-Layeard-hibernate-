@@ -96,10 +96,15 @@ public class ManageCustomerControl {
     }
 
     public void saveMemborButtonOnAction(ActionEvent actionEvent) throws Exception {
+
         String name = customerName.getText();
         String nic = customerId.getText();
         String phoneNo = customerPhoneNumber.getText();
+        if (name.isEmpty() || nic.isEmpty() || phoneNo.isEmpty() || noOfMembores.getText().isEmpty()){
+            return;
+        }
         int memborCount = Integer.parseInt(noOfMembores.getText());
+
 
         if (saveMemborButton.getText().equals("Save")){
             customerBO.saveCustomer(nic, name, phoneNo, memborCount);
@@ -107,6 +112,11 @@ public class ManageCustomerControl {
         customerBO.updateCustmer(name,phoneNo,memborCount,nic);
         saveMemborButton.setText("Save");
         loadTable();
+
+        customerId.clear();
+        customerName.clear();
+        customerPhoneNumber.clear();
+        noOfMembores.clear();
     }
 
     public void deletMemborButtonOnAction(ActionEvent actionEvent) throws Exception {

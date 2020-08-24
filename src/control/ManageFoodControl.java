@@ -79,12 +79,18 @@ public class ManageFoodControl {
     }
 
     public void deletButtonOnAction(ActionEvent actionEvent) throws Exception{
+        if (foodTable.getSelectionModel().isEmpty()){
+            return;
+        }
         String foodId = foodTable.getSelectionModel().getSelectedItem().getFoodId();
         foodBO.deletFood(foodId);
         loadTable();
     }
 
     public void saveButtonOnAction(ActionEvent actionEvent) throws Exception{
+        if (foodId.getText().isEmpty() || foodName.getText().isEmpty() || unitPrice.getText().isEmpty() || quentityOnHand.getText().isEmpty()){
+            return;
+        }
         String Id = foodId.getText();
         String Name = foodName.getText();
         BigDecimal price = BigDecimal.valueOf(Double.parseDouble(unitPrice.getText()));
@@ -96,6 +102,11 @@ public class ManageFoodControl {
         foodBO.updateFoods(Id,Name,price,quentity);
         loadTable();
         saveButton.setText("_Save");
+
+        foodId.clear();
+        foodName.clear();
+        unitPrice.clear();
+        quentityOnHand.clear();
 
     }
 

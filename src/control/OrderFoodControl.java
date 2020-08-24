@@ -22,6 +22,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
 import org.omg.CORBA.INTERNAL;
 import util.CustomerTM;
 import util.FoodTM;
@@ -170,10 +171,15 @@ public class OrderFoodControl {
     }
 
     public void placeOrderButtonOnAction(ActionEvent actionEvent) throws Exception{
+
+        if (orderFoodTMS.isEmpty()){
+            return;
+        }
         orderFoodBO.placeOrderFood(ordrIdLable.getText(),customerId.getValue(),orderFoodTMS);
         orderFoodTable.getItems().clear();
         customerId.getItems().clear();
         customerName.clear();
+
 
     }
 
