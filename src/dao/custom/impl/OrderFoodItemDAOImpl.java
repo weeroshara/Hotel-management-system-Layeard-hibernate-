@@ -4,10 +4,19 @@ import dao.CrudUtil;
 import dao.custom.OrderFoodItemDAO;
 import entity.OrderFoodItem;
 import entity.OrderFoodItemPK;
+import org.hibernate.Session;
 
 import java.util.List;
 
 public class OrderFoodItemDAOImpl implements OrderFoodItemDAO {
+
+    private Session session;
+
+    @Override
+    public void setSesion(Session sesion) {
+        this.session=sesion;
+    }
+
     @Override
     public List<OrderFoodItem> findAll() {
         return null;
@@ -19,18 +28,17 @@ public class OrderFoodItemDAOImpl implements OrderFoodItemDAO {
     }
 
     @Override
-    public boolean save(OrderFoodItem entity) {
-        return CrudUtil.execute("INSERT INTO OrderFoodItem VALUES (?,?,?,?)",entity.getOrderFoodItemPK().getOrderId(),
+    public void save(OrderFoodItem entity) {
+         CrudUtil.execute("INSERT INTO OrderFoodItem VALUES (?,?,?,?)",entity.getOrderFoodItemPK().getOrderId(),
                 entity.getOrderFoodItemPK().getFoodId(),entity.getFoodName(),entity.getQuentity());
     }
 
     @Override
-    public boolean update(OrderFoodItem entity) {
-        return false;
+    public void update(OrderFoodItem entity) {
     }
 
     @Override
-    public boolean delete(OrderFoodItemPK key) {
-        return false;
+    public void delete(OrderFoodItemPK key) {
+
     }
 }

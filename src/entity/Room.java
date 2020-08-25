@@ -1,15 +1,29 @@
 package entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.math.BigDecimal;
 
+
+@Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class Room implements  SupperEntity{
+    @Id
     private String roomId;
     private String category;
     private BigDecimal price;
     private int numberOfBeds;
     private int isBook;
 
-    public Room() {
+   /* public Room() {
     }
 
 
@@ -70,5 +84,5 @@ public class Room implements  SupperEntity{
                 ", numberOfBeds=" + numberOfBeds +
                 ", isBook=" + isBook +
                 '}';
-    }
+    }*/
 }

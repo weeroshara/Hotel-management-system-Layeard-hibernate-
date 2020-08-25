@@ -8,13 +8,20 @@ import dao.custom.FoodDAO;
 import dao.custom.OrderFoodDAO;
 import dao.custom.OrderFoodItemDAO;
 import db.DBConnection;
+import db.HibernateUtil;
+import entity.Food;
 import entity.OrderFood;
 import entity.OrderFoodItem;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
+import util.FoodTM;
 import util.OrderFoodTM;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderFoodBOImpl implements OrderFoodBO {
@@ -25,54 +32,77 @@ public class OrderFoodBOImpl implements OrderFoodBO {
 
     @Override
     public String orderId() throws Exception {
-        String s = orderFoodDAO.ordrId();
-        if (s==null){
-            return "OD001";
-        }
+
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        orderFoodDAO.setSesion(session);
+        Transaction tx=null;
 
         String newId="";
-        int lastId = Integer.parseInt(s.replace("OD", ""));
-        lastId=lastId+1;
-        if (lastId<10){
-            newId="OD00"+lastId;
-        }else if (lastId<100){
-            newId="OD0"+lastId;
-        }else {
-            newId="OD"+lastId;
+        try {
+            tx=session.beginTransaction();
+
+            String s = orderFoodDAO.ordrId();
+            if (s==null){
+                return "OD001";
+            }
+
+            int lastId = Integer.parseInt(s.replace("OD", ""));
+            lastId=lastId+1;
+            if (lastId<10){
+                newId="OD00"+lastId;
+            }else if (lastId<100){
+                newId="OD0"+lastId;
+            }else {
+                newId="OD"+lastId;
+            }
+
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
         }
         return newId;
+
+
+
     }
 
     @Override
-    public boolean placeOrderFood(String orderId, String customerId, List<OrderFoodTM> orderFoodTMS){
-        Connection connection = DBConnection.getInstance().getConnection();
+    public void placeOrderFood(String orderId, String customerId, List<OrderFoodTM> orderFoodTMS){
+
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        orderFoodDAO.setSesion(session);
+        Transaction tx=null;
 
         try {
-            connection.setAutoCommit(false);
+            tx=session.beginTransaction();
 
-            boolean resultSet = orderFoodDAO.save(new OrderFood(orderId, customerId, LocalDate.now() + "", null));
-            if (!resultSet){
-                connection.rollback();
-                return false;
-            }
+            String now = LocalDate.now()+"";
+            orderFoodDAO.save(new OrderFood(orderId, customerId, Date.valueOf(now), null));
 
             for (OrderFoodTM orderFoodTM : orderFoodTMS) {
-                resultSet = orderFoodItemDAO.save(new OrderFoodItem(orderId,orderFoodTM.getFoodId(),orderFoodTM.getFoodName(),orderFoodTM.getQuentity()));
+                orderFoodItemDAO.save(new OrderFoodItem(orderId,orderFoodTM.getFoodId(),orderFoodTM.getFoodName(),orderFoodTM.getQuentity()));
 
-                if (!resultSet){
-                    connection.rollback();
-                    return false;
-                }
-
-
-                resultSet= foodDAO.updateFoodCuentity(orderFoodTM.getQuentity(),orderFoodTM.getFoodId());
-                if (!resultSet){
-                    connection.rollback();
-                    return false;
-                }
+                foodDAO.updateFoodCuentity(orderFoodTM.getQuentity(),orderFoodTM.getFoodId());
 
             }
-            return true;
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+
+
+        /*try {
+            connection.setAutoCommit(false);
+
+
+
+
+
+
         } catch (Exception e) {
             e.printStackTrace();
             try {
@@ -80,14 +110,13 @@ public class OrderFoodBOImpl implements OrderFoodBO {
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-            return false;
         }finally {
             try {
                 connection.setAutoCommit(true);
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
-        }
+        }*/
 
     }
 }

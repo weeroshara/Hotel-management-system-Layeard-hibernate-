@@ -4,7 +4,11 @@ import business.custom.FoodBO;
 import dao.DAOFactory;
 import dao.DAOType;
 import dao.custom.FoodDAO;
+import db.HibernateUtil;
+import entity.Customer;
 import entity.Food;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import util.FoodTM;
 
 import java.math.BigDecimal;
@@ -15,42 +19,130 @@ public class FoodBOImpl implements FoodBO {
     FoodDAO foodDAO=DAOFactory.getInstance().getDAO(DAOType.FOOD);
     @Override
     public List<FoodTM> allFoods() throws Exception {
-        List<Food> allFood = foodDAO.findAll();
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        foodDAO.setSesion(session);
+        Transaction tx=null;
+
         List<FoodTM> foodTMS=new ArrayList<>();
-        for (Food food : allFood) {
-            foodTMS.add(new FoodTM(food.getFoodId(),food.getFoodName(),food.getPrice(),food.getPuentityOnHand()));
+        try {
+            tx=session.beginTransaction();
+
+            List<Food> allFood = foodDAO.findAll();
+            for (Food food : allFood) {
+                foodTMS.add(new FoodTM(food.getFoodId(),food.getFoodName(),food.getPrice(),food.getPuentityOnHand()));
+            }
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
         }
+
         return foodTMS;
     }
 
     @Override
     public List<FoodTM> findPosibleFoods() throws Exception {
-        List<Food> foods = foodDAO.handOnFoods();
+
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        foodDAO.setSesion(session);
+        Transaction tx=null;
+
         List<FoodTM> foodTMS=new ArrayList<>();
-        for (Food food : foods) {
-            foodTMS.add(new FoodTM(food.getFoodId(),food.getFoodName(),food.getPrice(),food.getPuentityOnHand()));
+        try {
+            tx=session.beginTransaction();
+
+            List<Food> foods = foodDAO.handOnFoods();
+            for (Food food : foods) {
+                foodTMS.add(new FoodTM(food.getFoodId(),food.getFoodName(),food.getPrice(),food.getPuentityOnHand()));
+            }
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
         }
+
         return foodTMS;
+
     }
 
     @Override
     public FoodTM findFood(String foodId) throws Exception {
-        Food food = foodDAO.find(foodId);
-        return new FoodTM(food.getFoodId(),food.getFoodName(),food.getPrice(),food.getPuentityOnHand());
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        foodDAO.setSesion(session);
+        Transaction tx=null;
+
+        FoodTM foodTM=null;
+        try {
+            tx=session.beginTransaction();
+
+            Food food = foodDAO.find(foodId);
+            foodTM = new FoodTM(food.getFoodId(), food.getFoodName(), food.getPrice(), food.getPuentityOnHand());
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+        return foodTM;
     }
 
     @Override
-    public boolean saveFood(String foodId, String foodName, BigDecimal price, int quentityOnHand) throws Exception {
-        return foodDAO.save(new Food(foodId,foodName,price,quentityOnHand));
+    public void saveFood(String foodId, String foodName, BigDecimal price, int quentityOnHand) throws Exception {
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        foodDAO.setSesion(session);
+        Transaction tx=null;
+
+        try {
+            tx=session.beginTransaction();
+
+            foodDAO.save(new Food(foodId,foodName,price,quentityOnHand));
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+
     }
 
     @Override
-    public boolean updateFoods(String foodId, String foodName, BigDecimal price, int quentityOnHand) throws Exception {
-        return foodDAO.update(new Food(foodId,foodName,price,quentityOnHand));
+    public void updateFoods(String foodId, String foodName, BigDecimal price, int quentityOnHand) throws Exception {
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        foodDAO.setSesion(session);
+        Transaction tx=null;
+
+        try {
+            tx=session.beginTransaction();
+
+            foodDAO.update(new Food(foodId,foodName,price,quentityOnHand));
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+
     }
 
     @Override
-    public boolean deletFood(String key) throws Exception {
-        return foodDAO.delete(key);
+    public void deletFood(String key) throws Exception {
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        foodDAO.setSesion(session);
+        Transaction tx=null;
+
+        try {
+            tx=session.beginTransaction();
+
+            foodDAO.delete(key);
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+
+
     }
 }

@@ -3,6 +3,8 @@ package dao.custom.impl;
 import dao.CrudUtil;
 import dao.custom.RoomDAO;
 import entity.Room;
+import org.hibernate.Session;
+import org.hibernate.transform.Transformers;
 import org.omg.IOP.ENCODING_CDR_ENCAPS;
 
 import java.math.BigDecimal;
@@ -12,63 +14,59 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomDAOImpl implements RoomDAO {
+    private Session session;
+
+    @Override
+    public void setSesion(Session sesion) {
+        this.session=sesion;
+    }
+
     @Override
     public List<Room> findAll() throws Exception{
-            ResultSet resultSet = CrudUtil.execute("SELECT *FROM Room");
-            List<Room> rooms=new ArrayList<>();
-            while (resultSet.next()){
-                BigDecimal price = BigDecimal.valueOf(Double.parseDouble(resultSet.getString(3)));
-                int bedCount = Integer.parseInt(resultSet.getString(4));
-                rooms.add(new Room(resultSet.getString(1),resultSet.getString(2), price,bedCount,
-                        resultSet.getInt(5)));
-            }
-            return rooms;
+        return session.createQuery("FROM entity.Room").list();
 
     }
 
     @Override
     public Room find(String key) throws Exception{
-        ResultSet resultSet = CrudUtil.execute("SELECT *FROM Room WHERE roomId=?", key);
-        if (resultSet.next()){
-            BigDecimal price = BigDecimal.valueOf(Double.parseDouble(resultSet.getString(3)));
-            int bedCount = Integer.parseInt(resultSet.getString(4));
-            return new Room(resultSet.getString(1),resultSet.getString(2),price,bedCount,resultSet.getInt(5));
-        }
-        return null;
+        return session.get(Room.class,key);
 
     }
 
     @Override
-    public boolean save(Room entity) {
-        return CrudUtil.execute("INSERT INTO Room VALUES (?,?,?,?,?)",entity.getRoomId(),
-                entity.getCategory(),entity.getPrice(),entity.getNumberOfBeds(),entity.getIsBook());
+    public void save(Room entity) {
+       session.save(entity);
     }
 
     @Override
-    public boolean update(Room entity) {
-        return CrudUtil.execute("UPDATE Room SET category=?, price=?, numberOfBeds=?, isBook=? WHERE roomId=?",
-                entity.getCategory(), entity.getPrice(), entity.getNumberOfBeds(),
-                entity.getIsBook(), entity.getRoomId());
+    public void update(Room entity) {
+        session.update(entity);
     }
 
     @Override
-    public boolean delete(String key) {
-        return CrudUtil.execute("DELETE FROM Room WHERE roomId=?",key);
+    public void delete(String key) {
+       session.delete(key);
     }
 
     @Override
     public List<Room> acRoom(String category) throws Exception{
-            ResultSet resultSet = CrudUtil.execute("SELECT roomId FROM Room WHERE category=? AND isBook=?", category,0);
-            List<Room> rooms=new ArrayList<>();
-            while (resultSet.next()){
-                rooms.add(new Room(resultSet.getString(1),"",null,0,0));
-            }
-            return rooms;
+//        List<Room> list = session.createNativeQuery("SELECT *FROM Room r WHERE category=?1 AND isBook=?2", Room.class)
+//                .setParameter(1, category)
+//                .setParameter(2, 0).list();
+
+        List<Room> ac_room = session.createNativeQuery("SELECT *FROM Room r WHERE category=?1 AND isBook=?2", Room.class)
+                .setParameter(1, category)
+                .setParameter(2, 0).list();
+
+        return ac_room;
 
     }
 
     @Override
-    public boolean updateIsBook(String id, int isBook) throws Exception {
-        return CrudUtil.execute("UPDATE Room SET isBook=? WHERE roomId=?",isBook,id);
+    public void updateIsBook(String id, int isBook) throws Exception {
+        session.createNativeQuery("UPDATE Room SET isBook=?1 WHERE roomId=?2")
+                .setParameter(1,id)
+                .setParameter(2,isBook).uniqueResult();
+//        return CrudUtil.execute("UPDATE Room SET isBook=? WHERE roomId=?",isBook,id);
     }
 }

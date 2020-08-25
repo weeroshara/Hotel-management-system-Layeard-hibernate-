@@ -1,6 +1,6 @@
 package db;
 
-import entity.Food;
+import entity.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
@@ -23,6 +23,11 @@ public class HibernateUtil {
         Metadata metadata = new MetadataSources( standardRegistry )
                 //.addAnnotatedClass( MyEntity.class )
                 .addAnnotatedClass(Food.class)
+                .addAnnotatedClass(Customer.class)
+                .addAnnotatedClass(Room.class)
+                .addAnnotatedClass(OrderFood.class)
+                .addAnnotatedClass(OrderFoodItem.class)
+                .addAnnotatedClass(RoomBookDate.class)
 
 
                 .getMetadataBuilder()

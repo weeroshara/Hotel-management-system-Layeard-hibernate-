@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OrderFoodBO extends SuperBO {
     public String orderId() throws Exception;
-    public boolean placeOrderFood(String orderId, String customerId, List<OrderFoodTM> orderFoodTMS) throws Exception;
+    public void placeOrderFood(String orderId, String customerId, List<OrderFoodTM> orderFoodTMS) throws Exception;
 }

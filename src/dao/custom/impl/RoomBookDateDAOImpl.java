@@ -4,6 +4,7 @@ import dao.CrudUtil;
 import dao.custom.RoomBookDateDAO;
 import entity.RoomBookDate;
 import entity.RoomBookDatePK;
+import org.hibernate.Session;
 
 import javax.xml.transform.Result;
 import java.sql.ResultSet;
@@ -11,36 +12,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RoomBookDateDAOImpl implements RoomBookDateDAO {
+
+
+    private Session session;
+
+    @Override
+    public void setSesion(Session sesion) {
+        this.session=sesion;
+    }
+
     @Override
     public List<RoomBookDate> findAll() throws Exception{
-        ResultSet resultSet = CrudUtil.execute("SELECT *FROM RoomBookDate");
-        List<RoomBookDate> roomBookDates=new ArrayList<>();
-        while (resultSet.next()){
-            roomBookDates.add(new RoomBookDate(resultSet.getString(1),resultSet.getString(2),
-                    resultSet.getDate(3)));
-        }
-        return roomBookDates;
+       return session.createQuery("FROM entity.RoomBookDate").list();
+
     }
 
     @Override
     public RoomBookDate find(RoomBookDatePK key) throws Exception{
-        return null;
+        return session.get(RoomBookDate.class,key);
     }
 
     @Override
-    public boolean save(RoomBookDate entity) throws Exception{
-        return CrudUtil.execute("INSERT INTO RoomBookDate VALUES (?,?,?)",entity.getRoomBookDatePK().getRoomId(),
-                entity.getRoomBookDatePK().getCustomerId(),entity.getBookingDate());
+    public void save(RoomBookDate roomBookDate) throws Exception{
+       session.save(roomBookDate);
     }
 
     @Override
-    public boolean update(RoomBookDate entity) throws Exception{
-        return false;
+    public void update(RoomBookDate roomBookDate) throws Exception{
+       session.update(roomBookDate);
     }
 
     @Override
-    public boolean delete(RoomBookDatePK key) throws Exception{
-        return false;
+    public void delete(RoomBookDatePK key) throws Exception{
+        session.delete(key);
     }
 
 }

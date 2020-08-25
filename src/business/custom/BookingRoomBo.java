@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface BookingRoomBo extends SuperBO {
     public List<String> acRoomOrNon(String category) throws Exception;
-    public boolean placeRoomOrder(String customerId, Date date, List<BookRoomTM> bookRoomTMS) throws Exception;
+    public void placeRoomOrder(String customerId, Date date, List<BookRoomTM> bookRoomTMS) throws Exception;
 
 
 }

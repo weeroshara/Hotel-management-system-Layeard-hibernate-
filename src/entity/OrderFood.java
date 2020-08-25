@@ -1,16 +1,33 @@
 package entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+import javax.persistence.*;
 import java.security.PrivateKey;
 import java.sql.Date;
 import java.time.LocalDate;
 
+@Data
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@ToString
 public class OrderFood implements  SupperEntity{
+    @Id
     private String orderId;
-    private String customerId;
     private String time;
     private Date deleverDate;
 
-    public OrderFood() {
+    //cascade eka depattatama dna one da?
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "customer_id",referencedColumnName = "nic")
+    private Customer customer;
+
+
+    /*public OrderFood() {
     }
 
     public OrderFood(String orderId, String customerId, String time, Date deleverDate) {
@@ -60,5 +77,5 @@ public class OrderFood implements  SupperEntity{
                 ", time='" + time + '\'' +
                 ", deleverDate=" + deleverDate +
                 '}';
-    }
+    }*/
 }

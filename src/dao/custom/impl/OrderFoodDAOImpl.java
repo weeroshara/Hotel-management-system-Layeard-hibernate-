@@ -3,12 +3,21 @@ package dao.custom.impl;
 import dao.CrudUtil;
 import dao.custom.OrderFoodDAO;
 import entity.OrderFood;
+import org.hibernate.Session;
 import org.omg.IOP.ENCODING_CDR_ENCAPS;
 
 import java.sql.ResultSet;
 import java.util.List;
 
 public class OrderFoodDAOImpl implements OrderFoodDAO {
+
+    private Session session;
+
+    @Override
+    public void setSesion(Session sesion) {
+        this.session=sesion;
+    }
+
     @Override
     public List<OrderFood> findAll() {
         return null;
@@ -20,19 +29,19 @@ public class OrderFoodDAOImpl implements OrderFoodDAO {
     }
 
     @Override
-    public boolean save(OrderFood entity) {
-        return CrudUtil.execute("INSERT INTO OrderFood VALUES (?,?,?,?)", entity.getOrderId(),entity.getCustomerId(),
+    public void save(OrderFood entity) {
+         CrudUtil.execute("INSERT INTO OrderFood VALUES (?,?,?,?)", entity.getOrderId(),entity.getCustomer(),
                 entity.getTime(),entity.getDeleverDate());
     }
 
     @Override
-    public boolean update(OrderFood entity) {
-        return false;
+    public void update(OrderFood entity) {
+
     }
 
     @Override
-    public boolean delete(String key) {
-        return false;
+    public void delete(String key) {
+
     }
 
     @Override

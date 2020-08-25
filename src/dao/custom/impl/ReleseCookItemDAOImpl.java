@@ -3,10 +3,20 @@ package dao.custom.impl;
 import dao.custom.ReleseCookItemDAO;
 import entity.ReleseCookItem;
 import entity.ReleseCookItemPK;
+import org.hibernate.Session;
 
 import java.util.List;
 
 public class ReleseCookItemDAOImpl implements ReleseCookItemDAO {
+
+
+    private Session session;
+
+    @Override
+    public void setSesion(Session sesion) {
+        this.session=sesion;
+    }
+
     @Override
     public List<ReleseCookItem> findAll() {
         return null;
@@ -18,17 +28,14 @@ public class ReleseCookItemDAOImpl implements ReleseCookItemDAO {
     }
 
     @Override
-    public boolean save(ReleseCookItem entity) {
-        return false;
+    public void save(ReleseCookItem entity) {
     }
 
     @Override
-    public boolean update(ReleseCookItem entity) {
-        return false;
+    public void update(ReleseCookItem entity) {
     }
 
     @Override
-    public boolean delete(ReleseCookItemPK key) {
-        return false;
+    public void delete(ReleseCookItemPK key) {
     }
 }

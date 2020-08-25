@@ -6,8 +6,11 @@ import business.custom.CustomerBO;
 import dao.DAOFactory;
 import dao.DAOType;
 import dao.custom.CustomerDAO;
+import db.HibernateUtil;
 import entity.Customer;
 import javafx.fxml.FXMLLoader;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 import util.CustomerTM;
 
 import java.util.ArrayList;
@@ -18,7 +21,30 @@ public class CustomerBOImpl implements CustomerBO {
     CustomerDAO customerDAO = DAOFactory.getInstance().getDAO(DAOType.CUSTOMER);
     @Override
     public List<CustomerTM> getAllCustomers() {
-            try {
+
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        customerDAO.setSesion(session);
+        Transaction tx=null;
+
+        List<CustomerTM> customerTMS = new ArrayList<>();
+        try {
+            tx=session.beginTransaction();
+
+            List<Customer> allCustomers = customerDAO.findAll();
+
+            for (Customer allCustomer : allCustomers) {
+                customerTMS.add(new CustomerTM(allCustomer.getNic(), allCustomer.getName(), allCustomer.getPhomeNumber(), allCustomer.getNoOfMembors()));
+            }
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+        return customerTMS;
+
+
+        /* try {
                 List<Customer> allCustomers = customerDAO.findAll();
                 List<CustomerTM> customerTMS = new ArrayList<>();
 
@@ -29,30 +55,88 @@ public class CustomerBOImpl implements CustomerBO {
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
-            }
+            }*/
 
     }
 
     @Override
     public CustomerTM getCustomer(String id) throws Exception {
-        Customer customer = customerDAO.find(id);
-        return new CustomerTM(customer.getNic(),customer.getName(),customer.getPhomeNumber(),customer.getNoOfMembors());
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        customerDAO.setSesion(session);
+        Transaction tx=null;
+
+        CustomerTM customerTM=null;
+        try {
+            tx=session.beginTransaction();
+
+            Customer customer = customerDAO.find(id);
+            customerTM = new CustomerTM(customer.getNic(), customer.getName(), customer.getPhomeNumber(), customer.getNoOfMembors());
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+        return customerTM;
+
     }
 
 
     @Override
-    public boolean saveCustomer(String id, String name, String phoneNo, int membors) throws Exception {
-        return customerDAO.save(new Customer(id,name,phoneNo,membors));
+    public void saveCustomer(String id, String name, String phoneNo, int membors) throws Exception {
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        customerDAO.setSesion(session);
+        Transaction tx=null;
+
+        try {
+            tx=session.beginTransaction();
+
+            customerDAO.save(new Customer(id,name,phoneNo,membors));
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+
     }
 
     @Override
-    public boolean updateCustmer(String name, String phoneNo, int membors, String id) throws Exception {
-        return customerDAO.update(new Customer(id,name,phoneNo,membors));
+    public void updateCustmer(String name, String phoneNo, int membors, String id) throws Exception {
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        customerDAO.setSesion(session);
+        Transaction tx=null;
+
+        try {
+            tx=session.beginTransaction();
+
+            customerDAO.update(new Customer(id,name,phoneNo,membors));
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+
     }
 
     @Override
-    public boolean deletCustomer(String id) throws Exception {
-        return customerDAO.delete(id);
+    public void deletCustomer(String id) throws Exception {
+        Session session = HibernateUtil.getSesionFactory().openSession();
+        customerDAO.setSesion(session);
+        Transaction tx=null;
+
+        try {
+            tx=session.beginTransaction();
+
+            customerDAO.delete(id);
+
+            tx.commit();
+        }catch (Throwable th){
+            th.printStackTrace();
+            tx.rollback();
+        }
+
     }
 
 
